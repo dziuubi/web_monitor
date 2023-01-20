@@ -1,14 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Page Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
 
 {% if chart %}
     <img src="data:image/png;base64, {{ chart|safe }}">
 {% endif %}
 
+{% endblock content %}
 
-</body>
-</html>
+
+
+
+
+
+
+
