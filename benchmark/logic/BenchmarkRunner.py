@@ -6,6 +6,8 @@ from os.path import join
 import os.path
 import asyncio
 import time
+from os import mkdir
+
 
 def value_or_default(value, dictionary, name):
     if name in dictionary:
@@ -70,8 +72,8 @@ class LogicModule:
             with open(json_filename, encoding="utf8") as json_data:
                 loaded_json = json.load(json_data)
                 try:
-                    sis = str(loaded_json["audits"]["speed-index"]["numericValue"])
-                    lcps = str(loaded_json["audits"]["largest-contentful-paint"]["numericValue"])
+                    sis = loaded_json["audits"]["speed-index"]["numericValue"]
+                    lcps = loaded_json["audits"]["largest-contentful-paint"]["numericValue"]
 
                     self.data[url]["sis"][round_number][call_number] = sis
                     self.data[url]["lcps"][round_number][call_number] = lcps
@@ -86,4 +88,3 @@ class LogicModule:
                         f.write(f"{sis};{lcps}\n")
                 except Exception as e:
                     print(e)
-

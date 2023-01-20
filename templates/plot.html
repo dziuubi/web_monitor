@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Page Title</title>
+</head>
+<body>
+
+{% if chart %}
+    <img src="data:image/png;base64, {{ chart|safe }}">
+{% endif %}
+
+
+</body>
+</html>
