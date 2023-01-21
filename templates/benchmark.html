@@ -1,0 +1,40 @@
+
+<div id="div">
+    Hello, benchmark.
+    <p id="text_main"></p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+<script>
+ var interval = setInterval(function(){
+    console.log("test");
+    var value="{{id}}";
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'check_finish' %}",
+        data: {"id": value},
+        success: function (response) {
+            var text = $("#text_main")[0];
+            console.log(text);
+            if (response["finished"]) {
+                console.log("processing finished");
+                text.innerHTML = "Processing finished";
+                clearInterval(interval);
+                window.location.href = "{% url 'report' id %}"
+            } else {
+                console.log("processing not finished");
+                text.innerHTML = "In progress...";
+            }
+        },
+        error: function (response) {
+            console.log(response)
+            clearInterval(interval);
+        }
+    })
+}, 5000);
+
+</script>
+
+
+

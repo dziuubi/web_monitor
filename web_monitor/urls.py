@@ -4,6 +4,8 @@ from web_monitor import views
 urlpatterns = [
     path('benchmark/', include('benchmark.urls')),
     path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('plot/', views.home, name='home')
+    path('plot/', views.home, name='home'),
+    path('checkfinish/', views.check_finish, name="check_finish"),
+    path('report/<int:id>/', views.results, name="report"),
+    path('', views.home, name='home')
 ]

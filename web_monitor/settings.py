@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web_monitor',
+    'benchmark.apps.BenchmarkConfig'
 ]
 
 MIDDLEWARE = [
