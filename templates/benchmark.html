@@ -1,40 +1,101 @@
+{% load static %}
 
-<div id="div">
-    Hello, benchmark.
-    <p id="text_main"></p>
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="{% static 'css/bootstrap.css' %}"
+/>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Performance Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Performance Test</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="col d-flex justify-content-center">
+
+<div class="card text-center w-50">
+  <div class="card-header">
+    Thank you for choosing our test!
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Please wait until we perform the test.</h5>
+    <p class="card-text">Test in progress...</p>
+    <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+  </div>
+  <div class="card-footer text-muted">
+    NOTE: If you put many URLs, the chart may be unreadable.
+  </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+</div>
+    <div id="div">
 
-<script>
- var interval = setInterval(function(){
-    console.log("test");
-    var value="{{id}}";
-    $.ajax({
-        type: 'GET',
-        url: "{% url 'check_finish' %}",
-        data: {"id": value},
-        success: function (response) {
-            var text = $("#text_main")[0];
-            console.log(text);
-            if (response["finished"]) {
-                console.log("processing finished");
-                text.innerHTML = "Processing finished";
-                clearInterval(interval);
-                window.location.href = "{% url 'report' id %}"
-            } else {
-                console.log("processing not finished");
-                text.innerHTML = "In progress...";
-            }
-        },
-        error: function (response) {
-            console.log(response)
-            clearInterval(interval);
-        }
-    })
-}, 5000);
+        <p id="text_main"></p>
 
-</script>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+
+    <script>
+        var interval = setInterval(function () {
+            console.log("test");
+            var value = "{{id}}";
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'check_finish' %}",
+                data: {"id": value},
+                success: function (response) {
+                    var text = $("#text_main")[0];
+                    console.log(text);
+                    if (response["finished"]) {
+                        console.log("processing finished");
+                        text.innerHTML = "";
+                        clearInterval(interval);
+                        window.location.href = "{% url 'report' id %}"
+                    } else {
+                        console.log("processing not finished");
+                        text.innerHTML = "";
+                    }
+                },
+                error: function (response) {
+                    console.log(response)
+                    clearInterval(interval);
+                }
+            })
+        }, 5000);
+
+    </script>
+
+</body>
+
+</html>
+
 
 
 

@@ -43,9 +43,10 @@ class LogicModule:
         for url in self.urls:
             self.data[url] = {}
             for data_type in ["sis", "lcps"]:
-                self.data[url][data_type] = {}
-                for i in range(self.amount_of_rounds):
-                    self.data[url][data_type][i] = {}
+                self.data[url][data_type] = []
+                    #{}
+                #for i in range(self.amount_of_rounds):
+                #    self.data[url][data_type][i] = {}
 
     def process_data(self):
         filename = f"data//{self.name}_{self.getdate}_final_result.json"
@@ -75,8 +76,8 @@ class LogicModule:
                     sis = loaded_json["audits"]["speed-index"]["numericValue"]
                     lcps = loaded_json["audits"]["largest-contentful-paint"]["numericValue"]
 
-                    self.data[url]["sis"][round_number][call_number] = sis
-                    self.data[url]["lcps"][round_number][call_number] = lcps
+                    self.data[url]["sis"].append(sis)
+                    self.data[url]["lcps"].append(lcps)
 
                     formatted_url = url.replace("/", "").replace(":", "")
                     filename = "data\\" + formatted_url + '.txt'

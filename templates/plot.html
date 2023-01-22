@@ -4,7 +4,7 @@
 {% block content %}
 
 {% if chart %}
-    <img src="data:image/png;base64, {{ chart|safe }}">
+   <img src="data:image/png;base64, {{ chart|safe }}" class="rounded mx-auto d-block" alt=""  height="500">
 {% endif %}
 
 {% endblock content %}
