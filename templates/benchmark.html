@@ -85,6 +85,7 @@
                 },
                 error: function (response) {
                     console.log(response)
+                    alert("Error during processing of your request. Please refresh and try again")
                     clearInterval(interval);
                 }
             })

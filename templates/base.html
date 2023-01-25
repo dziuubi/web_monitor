@@ -33,7 +33,7 @@
     </div>
 </nav>
 
-{% if not chart %}
+{% if not data %}
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-4">
@@ -47,13 +47,18 @@
                     </div>
                     <div class="form-group">
                         <label for="rounds">Number of test rounds</label>
-                        <input type="number" min="0" step="1" class="form-control" id="rounds"
+                        <input type="number" min="0" step="1" value="3" class="form-control" id="rounds"
                                placeholder="Enter how many rounds of tests you need" name="Rounds">
                     </div>
                     <div class="form-group">
                         <label for="interval">Time between rounds</label>
-                        <input type="number" min="0" step="1" class="form-control" id="interval"
+                        <input type="number" min="0" step="1" value="5" class="form-control" id="interval"
                                placeholder="Enter how many seconds inbetween rounds" name="Interval">
+                    </div>
+                    <div class="form-group">
+                        <label for="interval">Number of tries in every round</label>
+                        <input type="number" min="0" step="1" value="3" class="form-control" id="tries"
+                               placeholder="Enter how many tries in every round you need" name="Tries">
                     </div>
                     <button type="Submit" name="Submit" class="btn btn-dark">Perform test</button>
                 </form>
@@ -62,12 +67,11 @@
     </div>
 {% endif %}
 
-{% if chart %}
+{% if data %}
 
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
         <tr>
-            <th scope="col">#</th>
             <th scope="col">URL</th>
             <th scope="col">Average Search Index [ms]</th>
             <th scope="col">Average Largest Contentful Paint [ms]</th>
@@ -76,8 +80,7 @@
         <tbody>
         {% for i in data %}
             <tr>
-                <th scope="row">{{ i.label }}</th>
-                <td>{{ i.url }}</td>
+                <th scope="row">{{ i.url }}</th>
                 <td>{{ i.sis }}</td>
                 <td>{{ i.lcps }}</td>
             </tr>
@@ -85,12 +88,15 @@
         </tbody>
     </table>
 
-
-
-
-    <img src="data:image/png;base64, {{ chart|safe }}" class="rounded mx-auto d-block" alt="" height="500">
 {% endif %}
 
+{% if chart_siss %}
+   <img src="data:image/png;base64, {{ chart_siss|safe }}" class="rounded mx-auto d-block" alt=""  height="500">
+{% endif %}
+
+{% if chart_lcps %}
+   <img src="data:image/png;base64, {{ chart_lcps|safe }}" class="rounded mx-auto d-block" alt=""  height="500">
+{% endif %}
 </body>
 
 </html>

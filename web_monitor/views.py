@@ -10,7 +10,7 @@ import threading
 import datetime
 import numpy as np
 import matplotlib.pyplot as plt
-from .utils import get_plot
+from .utils import get_plot, get_other_plot
 
 
 def is_ajax(request):
@@ -32,6 +32,7 @@ def home(request):
         url = request.POST.get('URL')
         rounds = int(request.POST.get('Rounds'))
         interval = request.POST.get('Interval')
+        tries = int(request.POST.get('Tries'))
         submitbutton = request.POST.get('Submit')
 
         context = {'URL': url,
@@ -47,10 +48,10 @@ def home(request):
             "urls": urls,
             "amount_of_rounds": rounds,
             "seconds_between_rounds": int(interval),
-
+            "amount_of_tries": tries,
         }
         report = Result()
-
+        report.args = json.dumps(run_arguments)
         report.save()
         id = report.pk
         threading.Thread(target=run_thread, args=[run_arguments, id]).start()
@@ -77,27 +78,43 @@ def check_finish(request):
 
 def results(request, id):
     history = Result.objects.get(pk=id)
-    print(history.data_json)
+    args = json.loads(history.args)
+
+    print(args)
     data_json = json.loads(history.data_json)
-    a = range(9)
+    print(data_json)
+    data_formatted = {"sis": {},
+                      "lcps": {}}
+    # URL/TYPE/ROUND/RESULTS
+    ##for every url, we need to make round list
+    #TYPE/URL/Round/Results
+    for url, types in data_json.items():
+        for type, rounds in types.items():
+            print(rounds)
+            for number, round_ in rounds.items():
+                print(f"number: {number}, round: {round_}")
+                if url not in data_formatted[type]:
+                    data_formatted[type][url] = []
+                data_formatted[type][url].append(round(mean(round_)))
 
-    labels = [f"URL{i}" for i in range(1, len(data_json) + 1)]
-    sis = [round(mean(val["sis"])) for val in data_json.values()]
-    lcps = [round(mean(val["lcps"])) for val in data_json.values()]
-    urls = list(data_json.keys())
+    print("Formatted", data_formatted)
+    labels = [f"Round {i}" for i in range(1, args["amount_of_rounds"] + 1)]
+    #sis = [round(mean(val["sis"])) for val in data_json.values()]
+    #lcps = [round(mean(val["lcps"])) for val in data_json.values()]
+    urls = args["urls"]
 
-    chart = get_plot(labels, sis, lcps)
+    chart_siss = get_other_plot(labels, data_formatted["sis"], 'Chart of average SI times for given URLs')
+    chart_lcps = get_other_plot(labels, data_formatted["lcps"], 'Chart of average LCP times for given URLs')
 
-    data = [{"url": urls[i],
-             "sis": sis[i],
-             "lcps": lcps[i],
-             "label": labels[i],
+    data = [{"url": url,
+             "sis": round(mean([item for sublist in types["sis"].values() for item in sublist])),
+             "lcps": round(mean([item for sublist in types["lcps"].values() for item in sublist])),
              }
-            for i in range(len(urls))
-            ]
+            for url, types in data_json.items()]
 
     context = {
-        'chart': chart,
-        'data': data,
+        'chart_siss': chart_siss,
+        'chart_lcps': chart_lcps,
+        'data': data
     }
     return render(request, 'plot.html', context)
